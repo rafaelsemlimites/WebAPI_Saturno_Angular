@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Data.Common;
 using WebAPI_Saturno.DataContext;
 using WebAPI_Saturno.Models;
@@ -13,6 +15,7 @@ namespace WebAPI_Saturno.Service.ClienteService
         
             _context = context;
         }
+
 
         public async Task<ServiceResponse<List<ClienteModel>>> GetClientes()
         {

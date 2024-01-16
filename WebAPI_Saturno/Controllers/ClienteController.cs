@@ -21,6 +21,7 @@ namespace WebAPI_Saturno.Controllers
         /// Obtém a lista de clientes.
         /// </summary>
         /// <returns>Uma resposta contendo a lista de clientes.</returns>
+        /// <response code="200">Sucesso</response>
         [HttpGet]
         [ProducesResponseType(typeof(ServiceResponse<List<ClienteModel>>), 200)]
         [Produces("application/json")]
@@ -30,10 +31,13 @@ namespace WebAPI_Saturno.Controllers
         }
 
         /// <summary>
-        /// Obtém um cliente por ID.
+        /// Obtém um cliente por número de telefone.
         /// </summary>
-        /// <param name="id">O ID do cliente.</param>
+        /// <param name="ddd">DDD do telefone.</param>
+        /// <param name="numero">Número do telefone.</param>
         /// <returns>Uma resposta contendo o cliente correspondente ao ID.</returns>
+        /// /// <response code="200">Sucesso</response>
+        /// /// <response code="404">Não Encontrado</response>
         [HttpGet("{ddd}/{numero}")]
         [ProducesResponseType(typeof(ServiceResponse<ClienteModel>), 200)]
         [ProducesResponseType(404)]
@@ -46,10 +50,15 @@ namespace WebAPI_Saturno.Controllers
         /// <summary>
         /// Cria um novo cliente.
         /// </summary>
+        /// <remarks>
+        ///  {id=0nome=stringemail=stringtelefones=[{ddd=stringnumero=stringtipo=Fixo}]tipoCliente=Ouroativo=truedataDeAlteracao=2024-01-16T21:37:50.884Z}
+        /// </remarks>
         /// <param name="novoCliente">Os detalhes do novo cliente.</param>
         /// <returns>Uma resposta contendo a lista atualizada de clientes.</returns>
+        /// <response code="201">Criado com Sucesso</response>
+        /// <response code="400">Erro ao recuperar a lista de clientes</response>
         [HttpPost]
-        [ProducesResponseType(typeof(ServiceResponse<List<ClienteModel>>), 200)]
+        [ProducesResponseType(typeof(ServiceResponse<List<ClienteModel>>), 201)]
         [ProducesResponseType(400)]
         [Produces("application/json")]
         public async Task<ActionResult<ServiceResponse<List<ClienteModel>>>> CreateCliente(ClienteModel novoCliente)
@@ -62,8 +71,10 @@ namespace WebAPI_Saturno.Controllers
         /// </summary>
         /// <param name="id">O ID do cliente a ser inativado.</param>
         /// <returns>Uma resposta contendo o cliente inativado.</returns>
+        /// <response code="204">Inativado(atualizado) com Sucesso</response>
+        /// <response code="404">Não Encontrado</response>
         [HttpPut("InativarCliente/{id}")]
-        [ProducesResponseType(typeof(ServiceResponse<ClienteModel>), 200)]
+        [ProducesResponseType(typeof(ServiceResponse<ClienteModel>), 204)]
         [ProducesResponseType(404)]
         [Produces("application/json")]
         public async Task<ActionResult<ServiceResponse<ClienteModel>>> InativaCliente(int id)
@@ -77,9 +88,11 @@ namespace WebAPI_Saturno.Controllers
         /// </summary>
         /// <param name="editadoCliente">Os detalhes do cliente editado.</param>
         /// <returns>Uma resposta contendo o cliente atualizado.</returns>
+        /// <response code="204">Inativado(atualizado) com Sucesso</response>
+        /// <response code="404">Não Encontrado</response>
         [HttpPut]
-        [ProducesResponseType(typeof(ServiceResponse<ClienteModel>), 200)]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(typeof(ServiceResponse<ClienteModel>), 204)]
+        [ProducesResponseType(404)]
         [Produces("application/json")]
         public async Task<ActionResult<ServiceResponse<ClienteModel>>> UpdateCliente(ClienteModel editadoCliente)
         {           
@@ -92,6 +105,8 @@ namespace WebAPI_Saturno.Controllers
         /// </summary>
         /// <param name="email">O Email do cliente a ser excluído.</param>
         /// <returns>Uma resposta contendo a lista atualizada de clientes após a exclusão.</returns>
+        /// <response code="204">Excluído Sucesso</response>
+        /// <response code="404">Não Encontrado</response>
         [HttpDelete("{email}")]
         [ProducesResponseType(typeof(ServiceResponse<List<ClienteModel>>), 200)]
         [ProducesResponseType(404)]

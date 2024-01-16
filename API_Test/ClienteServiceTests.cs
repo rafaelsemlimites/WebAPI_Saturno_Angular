@@ -1,17 +1,16 @@
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAPI_Saturno.Models;
 using WebAPI_Saturno.DataContext;
 using WebAPI_Saturno.Enums;
 using WebAPI_Saturno.Service.ClienteService;
+using Microsoft.AspNetCore.Http;
 
 namespace API_Test
 {
     [TestClass]
     public class ClienteServiceTests
     {
-
 
         [TestMethod]
         public void GetClientes_DeveRetornarClientes()
@@ -116,6 +115,82 @@ namespace API_Test
             }
         }
 
+        [TestMethod]
+        public async Task GetClienteByTelefone_BuscarPorTelefone()
+        {
+            // Configurar um contexto de teste ou usar um banco de dados em memória
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDatabase")
+                .Options;
+
+            // Criar um contexto de banco de dados usando o contexto de teste
+            using (var dbContext = new ApplicationDbContext(options))
+            {
+                // Adicionar dados de teste ao contexto
+                dbContext.Clientes.Add(new ClienteModel
+                {
+                    Nome = "Cliente 1",
+                    Email = "cliente1@gmail.com",
+                    Telefones = new List<TelefoneModel>
+            {
+                new TelefoneModel
+                {
+                    DDD = "11",
+                    Numero = "111111111111",
+                    Tipo = TelefoneEnum.Movel
+                },
+                new TelefoneModel
+                {
+                    DDD = "22",
+                    Numero = "2222222222",
+                    Tipo = TelefoneEnum.Fixo
+                }
+            },
+                    TipoCliente = ClienteEnum.Ouro,
+                    Ativo = true,
+                    DataDeAlteracao = DateTime.Now.ToLocalTime()
+                });
+
+                dbContext.Clientes.Add(new ClienteModel
+                {
+                    Nome = "Cliente 2",
+                    Email = "cliente2@gmail.com",
+                    Telefones = new List<TelefoneModel>
+            {
+                new TelefoneModel
+                {
+                    DDD = "11",
+                    Numero = "987654321",
+                    Tipo = TelefoneEnum.Movel
+                },
+                new TelefoneModel
+                {
+                    DDD = "44",
+                    Numero = "4444444444444",
+                    Tipo = TelefoneEnum.Movel
+                }
+            },
+                    TipoCliente = ClienteEnum.Prata,
+                    Ativo = true,
+                    DataDeAlteracao = DateTime.Now.ToLocalTime()
+                });
+
+                dbContext.SaveChanges();
+
+                // Criar uma instância do serviço, passando o contexto de teste
+                var clienteService = new ClienteService(dbContext);
+
+                // Pesquisa
+                const string ddd = "11";
+                const string numero = "987654321";
+
+                // Chama metodo para testar
+                var cliente = await clienteService.GetClienteByTelefone(ddd, numero);
+
+                // Assert
+                Assert.IsNotNull(cliente.Dados);
+            }
+        }
 
     }
 }

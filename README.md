@@ -1,3 +1,6 @@
+![image](https://github.com/rafaelsemlimites/WebAPI_Saturno_Angular/assets/7587999/caac9b60-1367-44e5-9d40-92bc5e57bf0d)
+
+
 Nome do projeto: Saturno
 
 Versão: 1.0.0
